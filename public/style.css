@@ -1,0 +1,24 @@
+* {
+  font-family: Verdana, arial, sans-serif;
+}
+
+.code, span {
+  font-family: courier;
+  color: #0e0e0e;
+  font-weight: bold;
+  font-size: 9pt;
+}
+
+pre { font-family: courier; }
+
+.type { color: #36caff }
+
+.complexType { color: #439cdf }
+
+.name { color: #43dc43 }
+
+.function { color: magenta }
+
+address {
+  font-size: 75%;
+}
