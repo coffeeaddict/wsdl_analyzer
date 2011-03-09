@@ -1,0 +1,8 @@
+<h2>Operations</h2>
+
+<% @operations.each do |name, info| %>
+  <a href='/operation/<%= name %>'><%= name %></a><br />
+  <em><%= info[:documentation] %></em><br />
+  <br />
+<% end %>
+

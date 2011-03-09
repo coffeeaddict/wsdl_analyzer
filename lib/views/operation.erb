@@ -1,0 +1,23 @@
+<a href="/analyze">&lt; back</a>
+
+<h2><%= @name %></h2>
+
+<% if @operation[:documentation] %>
+  <h3>Documentation</h3>
+  <em><%= @operation[:documentation] %></em>
+  <br />
+  <br />
+<% end %>
+
+<h3>Synopsis</h3>
+<pre class="code"><%= @output.chomp %> = <span class="function"><%= @name %></span>(
+<%= @input %>
+)</pre>
+
+<br />
+<br />
+
+<h4>Legend</h4>
+<pre class="code">
+  <span class='name'>output</span>:<span class='complexType'>type</span> = <span class='function'>function</span>(<span class='name'>input</span>)
+</pre>

@@ -18,6 +18,10 @@ before do
   response.header['Cache-control'] = 'no-store'
 end
 
+get '/' do
+  erb :index
+end
+
 post '/post' do
   if params[:wsdl_file]
     if (tmpfile = params[:wsdl_file][:tempfile]) &&
@@ -46,48 +50,41 @@ post '/post' do
     redirect '/'
   end
 
-  "<h1>WSDL Analyzer</h1>
-   <h2>Absorbed</h2>
-   <a href='/raw'>raw</a> | <a href='/analyze'>analyze</a>"
-end
-
-get '/env' do
-  ENV['RACK_ENV']
+  erb :post
 end
 
 get '/analyze' do
   analyzer = WsdlAnalyzer.new(session[:file])
-  res = ""
+
+  @operations = []
   analyzer.get_operations.each do |name, info|
-    res += "<a href='/operation/#{name}'>#{name}</a>(#{info[:input]}) : #{info[:output]} - <em>#{info[:documentation]}</em><br />"
+    @operations << [name, info]
   end
 
-  res
+  erb :analyze
 end
 
 get '/operation/:name' do
   analyzer = WsdlAnalyzer.new session[:file]
 
-  op = analyzer.get_operation params[:name]
+  @operation = analyzer.get_operation params[:name]
 
-  output = ""
-  op[:output].each do |out|
-    output += html_output(out)
+  @output = ""
+  @operation[:output].each do |out|
+    @output += html_output(out)
   end
-  output.gsub! /^\s+$/, ''
+  @output.gsub! /^\s+$/, ''
 
-  input = ""
-  op[:input].each do |inp|
-    input += html_output(inp, 1)
+  @input = ""
+  @operation[:input].each do |inp|
+    @input += html_output(inp, 1)
   end
-  input.gsub! /^[\s\b]+$/m, ''
-  input.chomp!
+  @input.gsub! /^[\s\b]+$/m, ''
+  @input.chomp!
 
-  "<h1>WSDL Analyzer</h1><h2>#{params[:name]}</h2>
-    #{op[:documentation]}<br /><br />
-    <pre>#{output.chomp} = #{params[:name]}(
-#{input}
-)</pre>"
+  @name = params[:name]
+
+  erb :operation
 end
 
 get '/raw' do
