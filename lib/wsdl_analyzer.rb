@@ -48,7 +48,7 @@ class WsdlAnalyzer
 
     doc.xpath("/definitions/message[@name='#{name}']/part").each do |part|
       name = part['name']
-      type = part['type']
+      type = part['type'] || part['element']
 
       if type =~ /:/ and type !~ /xsd?:/
         type = strip_ns type
@@ -72,11 +72,21 @@ class WsdlAnalyzer
 
     res = {}
 
+    # is it a reference? Follow it
+    element = doc.xpath("/definitions/types/schema/element[@name='#{name}']").first
+    if element and element.children.empty? and !element['type'].nil?
+      ref = strip_ns element['type']
+      return get_complex_type(ref, depth + 1)
+    end
+
     candidates  = doc.xpath(
       "/definitions/types/schema/element[@name='#{name}']/complexType/*"
     )
     candidates += doc.xpath(
       "/definitions/types/schema/complexType[@name='#{name}']/*"
+    )
+    candidates += doc.xpath(
+      "/definitions/types/schema/simpleType[@name='#{name}']/*"
     )
 
     candidates.each do |node|
@@ -111,6 +121,33 @@ class WsdlAnalyzer
           else
             res << strip_ns(type)
           end
+        end
+
+      elsif node.name =~ /restriction/
+        # a 'simple' type
+        type = strip_ns(node['base'])
+
+        enums = []
+        node.xpath("./enumeration").each do |enum|
+          enums << enum['value']
+        end
+
+        restrictions = {}
+        %w(maxLength minLength).each do |restr_type|
+          node.xpath("./#{restr_type}").each do |restriction|
+            restrictions[restr_type] = restriction['value']
+          end
+        end
+
+        if enums.empty? and restrictions.empty?
+          res[name] = strip_ns(type)
+
+        else
+          name = type
+          res[name] = {}
+          res[name]['enumeration']  = enums.collect { |e| "'#{e}'" }.join(", ") unless enums.empty?
+          res[name]['restrictions'] = restrictions unless restrictions.empty?
+
         end
 
       end
