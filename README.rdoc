@@ -1,0 +1,23 @@
+= WSDL Analyzer
+
+== Description
+
+A Sinatra app to parse and normalize a WSDL file so you can browse the operations and get the gory input and output details
+
+== Install
+
+First get the source and the dependencies
+
+  % git clone git://github.com/coffeeaddict/wsdl_analyzer.git
+  % cd wsdl_analyzer
+  % bundle install
+
+Then, make something happen to get the rack app running.
+
+== Bugs, Caveats, etc.
+
+When analyzing the WSDL this sweet little app builds a DOM tree using Nokogiri. When analyzing rather large WSDL files, you
+could quite easily consume all the memory your webserver has to offer.
+
+I don't advice putting this in a public place unless you have some very decent hardware and know how to limit resources and
+traffic
