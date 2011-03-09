@@ -26,13 +26,20 @@ class WsdlAnalyzer
   def get_operation name
     operation = {}
     op = doc.xpath("/definitions/portType/operation[@name='#{name}']").first
-    input = strip_ns(op.xpath('input').first['message'])
+    input  = strip_ns(op.xpath('input').first['message'])
     output = strip_ns(op.xpath('output').first['message'])
+
+    fault = begin
+      strip_ns(op.xpath('fault').first['message'])
+    rescue
+      nil
+    end
 
     operation = {
       :documentation => op.xpath('documentation').text,
       :input         => get_message(input),
-      :output        => get_message(output)
+      :output        => get_message(output),
+      :fault         => fault ? get_message(fault) : fault
     }
   end
 

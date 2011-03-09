@@ -81,6 +81,13 @@ get '/operation/:name' do
   @input.gsub! /^[\s\b]+$/m, ''
   @input.chomp!
 
+  @fault = ""
+  if @operation[:fault]
+    @operation[:fault].each do |fault|
+      @fault += html_output(fault)
+    end
+  end
+
   @name = params[:name]
 
   erb :operation
