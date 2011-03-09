@@ -40,9 +40,8 @@ post '/post' do
     file_name = Digest::SHA1.hexdigest("#{$$} #{Time.now} #{url}")[0..8]
     file = File.open("/tmp/#{file_name}.wsdl", File::CREAT|File::TRUNC|File::WRONLY)
 
-    open(url) do |u|
-      file.puts u.gets
-    end
+    u = open(url)
+    file.puts u.read
 
     session[:file] = "/tmp/#{file_name}.wsdl"
 
