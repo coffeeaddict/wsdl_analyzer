@@ -105,7 +105,7 @@ def html_output complex, depth=0
   if complex.is_a? Hash
     complex.each do |k,v|
       if v.is_a? String
-        output += "#{k} => #{type_to_class v}\n"
+        output += "<span class='name'>#{k}</span>:<span class='type'>#{type_to_class v}</span>\n"
 
       else
         if v.is_a?(Hash)
@@ -114,12 +114,23 @@ def html_output complex, depth=0
           next_depth = depth + 1
         else
           next_depth = depth
-          ob = cb = " "
+          ob = cb = ""
         end
 
-        output += "#{k} => #{ob}#{html_output(v, next_depth)}\n"
-        output += indent if cb != ""
-        output += "#{cb}\n"
+        (name,type) = k.split ':'
+
+        if type
+          output += "<span class='name'>#{name}</span>:<span class='complexType'>#{type}</span>"
+        else
+          output += "<span class='complexType'>#{name}</span>"
+        end
+
+        output += " => #{ob}#{html_output(v, next_depth).chomp}\n"
+
+        if cb != ""
+          output += indent
+          output += "#{cb}\n"
+        end
       end
 
       output += indent
@@ -135,7 +146,7 @@ def html_output complex, depth=0
     end
 
   else
-    output += complex + "\n"
+    output += "<span class='type'>#{type_to_class(complex)}</span>\n"
 
   end
 

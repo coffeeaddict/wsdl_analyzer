@@ -1,24 +1,51 @@
+body { 
+  background: #c8c8c8;
+  margin: 0;
+  padding: 0;
+}
+
 * {
   font-family: Verdana, arial, sans-serif;
 }
 
-.code, span {
-  font-family: courier;
-  color: #0e0e0e;
-  font-weight: bold;
-  font-size: 9pt;
+.container { 
+  margin: 0 auto;
+  padding: 10px;
+  width: 960px;
+  font-size: 10pt;
+  background: white;
 }
 
-pre { font-family: courier; }
+.code, span {
+  font-family: courier;
+  color: #f8f8f8;
+  font-weight: bold;
+  font-size: 9pt;
+  background: #141414;
+}
 
-.type { color: #36caff }
+.code strong { 
+  color: red;
+}
 
-.complexType { color: #439cdf }
+pre {
+  padding: 10px;
+  margin: 20px;
+  font-family: courier;
+}
 
-.name { color: #43dc43 }
+/* Mimic TextMate/Redcar Twilight colors */
 
-.function { color: magenta }
+.type { color: #6d4d72 }
+
+.complexType { color: #9B5C2E }
+
+.name { color: #7587A6 }
+
+.function { color: #DAD085 }
 
 address {
   font-size: 75%;
 }
+
+em { padding-left: 20px; }
