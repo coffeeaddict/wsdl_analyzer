@@ -44,6 +44,8 @@ pre {
 
 .function { color: #DAD085 }
 
+.var {  color: #8F9D6A }
+
 address {
   font-size: 75%;
 }

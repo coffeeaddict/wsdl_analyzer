@@ -111,7 +111,15 @@ def html_output complex, depth=0
   if complex.is_a? Hash
     complex.each do |k,v|
       if v.is_a? String
-        output += "<span class='name'>#{k}</span>:<span class='type'>#{type_to_class v}</span>\n"
+        output += "<span class='name'>#{k}</span>:"
+
+        klass = type_to_class(v)
+        if klass != v
+          output += "<span class='type'>#{klass}</span>"
+        else
+          output += "<span class='var'>#{v}</span>"
+        end
+        output += "\n"
 
       else
         if v.is_a?(Hash)
@@ -152,7 +160,12 @@ def html_output complex, depth=0
     end
 
   else
-    output += "<span class='type'>#{type_to_class(complex)}</span>\n"
+    klass = type_to_class(complex)
+    if klass != complex
+      output += "<span class='type'>#{klass}</span>\n"
+    else
+      output += "<span class='var'>#{complex}</span>\n"
+    end
 
   end
 
@@ -163,8 +176,10 @@ def type_to_class type
   case type
   when "string"; "String"
   when "int"; "Integer"
-  when "double"; "Float"
-  when "boolean"; "TrueClass"
+  when "long"; "Long"
+  when "double"; "Double"
+  when "boolean"; "Boolean"
+  when "date"; "Date"
   else
     type
   end
