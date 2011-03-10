@@ -12,7 +12,12 @@ First get the source and the dependencies
   % cd wsdl_analyzer
   % bundle install
 
-Then, make something happen to get the rack app running.
+Then, make something happen to get the rack app running, like:
+
+  # gem install passenger
+  % passenger start
+
+(where # means you need privileges, either by su, sudo or convincing an admin)
 
 == Bugs, Caveats, etc.
 
